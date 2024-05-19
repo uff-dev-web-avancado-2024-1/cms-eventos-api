@@ -1,0 +1,13 @@
+package com.example.cmseventosapi;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class CmsEventosApiApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(CmsEventosApiApplication.class, args);
+    }
+
+}

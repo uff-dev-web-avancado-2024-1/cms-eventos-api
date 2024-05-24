@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 
 @RestController
-@RequestMapping("/Atividade")
+@RequestMapping("/api/Atividade")
 @Tag(name = "cms-eventos-api")
 public class ActivityController {
     

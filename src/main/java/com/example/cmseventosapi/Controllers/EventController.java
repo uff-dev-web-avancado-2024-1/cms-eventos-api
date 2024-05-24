@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 
 @RestController
-@RequestMapping("/evento")
+@RequestMapping("/api/evento")
 @Tag(name = "cms-eventos-api")
 public class EventController {
     
@@ -58,6 +58,18 @@ public class EventController {
     @DeleteMapping
     public String requestMethodName(@RequestParam String param) {
         return new String();
+    }
+
+    @Operation(summary = "Visualizar página do evento",method = "GET")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200",description = "Busca de evento feita com sucesso"),
+        @ApiResponse(responseCode = "400",description = "Parametros para busca de evento inválidos"),
+        @ApiResponse(responseCode = "500",description = "Erro ao buscar evento")
+    })
+    @GetMapping("{eventoId}/edicoes/{edicaoAno}")
+    public String visualizarEvento(@PathVariable long eventoId, @PathVariable long edicaoAno){
+         // TODO Implementar os métodos para cadastrar usuário
+        return "Evento de id: " + eventoId + " Edição: " + edicaoAno;
     }
 
 }

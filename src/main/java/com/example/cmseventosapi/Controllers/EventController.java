@@ -23,10 +23,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Tag(name = "cms-eventos-api")
 public class EventController {
     
-    @GetMapping
-    @Operation(summary = "")
-    public String getMethodName(@RequestParam String param) {
-        return new String();
+    @Operation(summary = "Visualiza Evento",method = "GET")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200",description = "Visualização de evento realizado com sucesso"),
+        @ApiResponse(responseCode = "400",description = "Parametro para visualização de evento inválidos"),
+        @ApiResponse(responseCode = "500",description = "Erro ao visualizar identidade evento")
+    })
+    @GetMapping("/")
+    public String getMethodName(@RequestParam String id) {
+        return id;
     }
 
     @Operation(summary = "Cadastra Eventos",method = "POST")

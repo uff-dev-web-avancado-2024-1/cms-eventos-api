@@ -12,7 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/espaco")
-@Tag(name = "cms-eventos-api")
+@Tag(name = "cms-space-api")
 public class SpaceController {
 
     @Operation(summary = "Cadastrar espaço disponivel", method = "POST")

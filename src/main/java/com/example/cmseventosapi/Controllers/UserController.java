@@ -3,6 +3,7 @@ package com.example.cmseventosapi.Controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,12 +15,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @RestController
-@RequestMapping("/api/usuario")
-@Tag(name = "cms-usuário-api")
+@RequestMapping("/api/usuarios")
+@Tag(name = "Usuário")
 public class UserController {
 
     @Operation(summary = "Cadastra novo usuário", method = "POST")
@@ -40,8 +43,8 @@ public class UserController {
         @ApiResponse(responseCode = "400",description = "Parametro para atualização de usuário inválidos"),
         @ApiResponse(responseCode = "500",description = "Erro ao atualizar usuário")
     })
-    @PutMapping(consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<User> atualizaUsuario(@RequestBody User usuario){
+    @PutMapping("/{usuario}")
+    public ResponseEntity<User> atualizaUsuario(@PathVariable("usuario") Long usuario_id, @RequestBody User usuarioAtualizado){
         // TODO Implementar os métodos para cadastrar usuário
         return new ResponseEntity<>(new User(),HttpStatus.OK);
     }

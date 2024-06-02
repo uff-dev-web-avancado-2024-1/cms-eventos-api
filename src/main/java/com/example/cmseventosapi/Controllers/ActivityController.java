@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
 @RequestMapping("/api/atividades")
-@Tag(name = "cms-atividade-api")
+@Tag(name = "Atividade")
 public class ActivityController {
     
     @Operation(summary = "Visualiza Atividade",method = "GET")
@@ -58,8 +59,8 @@ public class ActivityController {
         @ApiResponse(responseCode = "400",description = "Parametro para atualização de atividade inválidos"),
         @ApiResponse(responseCode = "500",description = "Erro ao atualizar atividade")
     })
-    @PutMapping(consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Activity> atualizaAtividade(@RequestBody Activity atividade) {
+    @PutMapping("/{atividade}")
+    public ResponseEntity<Activity> atualizaAtividade(@PathVariable("atividade") Long atividade_id, @RequestBody Activity atividadeAtualizada) {
         //TODO: process PUT request
         
         return new ResponseEntity<>(new Activity(),HttpStatus.OK);
@@ -72,7 +73,7 @@ public class ActivityController {
         @ApiResponse(responseCode = "500",description = "Erro ao remover atividade")
     })
     @DeleteMapping("/{atividade}")
-    public ResponseEntity<HttpStatus> removeAtividade(@PathParam("atividade") String id) {
+    public ResponseEntity<HttpStatus> removeAtividade(@PathVariable("atividade") String id) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     

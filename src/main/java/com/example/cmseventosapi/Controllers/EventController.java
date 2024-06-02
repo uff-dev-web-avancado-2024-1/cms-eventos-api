@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
 @RequestMapping("/api/eventos")
-@Tag(name = "cms-eventos-api")
+@Tag(name = "Eventos")
 public class EventController {
     
     @Operation(summary = "Visualiza Evento",method = "GET")
@@ -54,8 +55,8 @@ public class EventController {
         @ApiResponse(responseCode = "400",description = "Parametro para atualização de evento inválidos"),
         @ApiResponse(responseCode = "500",description = "Erro ao ataulizar evento")
     })
-    @PutMapping(consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Event> atualizaEvento(@RequestBody Event evento) {
+    @PutMapping("/{evento}")
+    public ResponseEntity<Event> atualizaEvento(@PathVariable("evento") Long evento_id, @RequestBody Event eventoAtualizado) {
         //TODO: process PUT request
         
         return new ResponseEntity<>(new Event(),HttpStatus.OK);
@@ -67,7 +68,7 @@ public class EventController {
         @ApiResponse(responseCode = "500",description = "Erro ao remover evento")
     })
     @DeleteMapping("/{evento}")
-    public ResponseEntity<HttpStatus> removeEvento(@PathParam("evento") String id) {
+    public ResponseEntity<HttpStatus> removeEvento(@PathVariable("evento") String id) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

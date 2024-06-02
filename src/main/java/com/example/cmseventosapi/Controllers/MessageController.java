@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/message")
-@Tag(name = "cms-message-api")
+@Tag(name = "Message")
 public class MessageController {
     @Operation(summary = "Cadastra novo mensagem", method = "POST")
     @ApiResponses(value = {

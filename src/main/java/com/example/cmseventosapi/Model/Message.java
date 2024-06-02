@@ -22,12 +22,14 @@ public class Message {
     @Column(nullable = false)
     private String content;
 
+    @ManyToOne
+    @JoinColumn(name = "sender_id", nullable = false)
     @Schema(description = "remetente da mensagem", example = "João da Silva")
-    @Column(nullable = false,updatable = false)
-    private Long sender;
+    private User sender;
 
+    @ManyToOne
+    @JoinColumn(name = "receiver_id", nullable = false)
     @Schema(description = "receptor da mensagem", example = "Pedro da Silva")
-    @Column(nullable = false,updatable = false)
-    private Long receiver;
+    private User receiver;
 
 }

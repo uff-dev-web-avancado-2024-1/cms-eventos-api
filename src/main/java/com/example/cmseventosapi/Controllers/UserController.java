@@ -1,23 +1,28 @@
 package com.example.cmseventosapi.Controllers;
 
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+
+import com.example.cmseventosapi.Model.User;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 
 
 @RestController
-@RequestMapping("/api/Usuario")
-@Tag(name = "cms-usuário-api")
+@RequestMapping("/api/usuarios")
+@Tag(name = "Usuário")
 public class UserController {
 
     @Operation(summary = "Cadastra novo usuário", method = "POST")
@@ -27,21 +32,20 @@ public class UserController {
         @ApiResponse(responseCode = "500",description = "Erro ao cadastrar usuário")
     })
     @PostMapping(consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
-    public String cadastrarUsuario(@RequestBody String entity){
+    public ResponseEntity<User> cadastrarUsuario(@RequestBody User usuario){
         // TODO Implementar os métodos para cadastrar usuário
-        return entity;
+        return new ResponseEntity<>(new User(),HttpStatus.OK);
     }
 
-    @Operation(summary = "Enviar mensagem com atividades favoritas", method = "POST")
+    @Operation(summary = "Atualiza novo usuário", method = "PUT")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Mensagem enviada com sucesso"),
-        @ApiResponse(responseCode = "500", description = "Erro ao enviar mensagem")
+        @ApiResponse(responseCode = "200",description = "Atualiza de usuário realizado com sucesso"),
+        @ApiResponse(responseCode = "400",description = "Parametro para atualização de usuário inválidos"),
+        @ApiResponse(responseCode = "500",description = "Erro ao atualizar usuário")
     })
-    @PostMapping(consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> enviarMesagemFavoritas(@RequestPart MultipartFile file) {
-        //TODO: process POST request     
-        return new ResponseEntity<>(null);
+    @PutMapping("/{usuario}")
+    public ResponseEntity<User> atualizaUsuario(@PathVariable("usuario") Long usuario_id, @RequestBody User usuarioAtualizado){
+        // TODO Implementar os métodos para cadastrar usuário
+        return new ResponseEntity<>(new User(),HttpStatus.OK);
     }
-
-
 }

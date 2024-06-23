@@ -67,4 +67,14 @@ public class EditionController {
     }
 
     @Operation(summary = "Remove Edição", method = "DELETE")
-    @ApiResponses(value =
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200",description = "Remoção de edição realizada com sucesso"),
+        @ApiResponse(responseCode = "400",description = "Parametro para remoção de edição inválidos"),
+        @ApiResponse(responseCode = "500",description = "Erro ao remover edição")
+    })
+    @DeleteMapping("/{edicao}")
+    public ResponseEntity<HttpStatus> removeEdicao(@PathVariable("edicao") Long id) {
+        //this.service.DeleteEdition(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+}

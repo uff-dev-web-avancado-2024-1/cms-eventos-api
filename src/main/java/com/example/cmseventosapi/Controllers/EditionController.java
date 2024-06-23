@@ -15,7 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/api/Edição")
+@RequestMapping("/api/edicao")
 @Tag(name = "cms-edições-api")
 public class EditionController {
     @GetMapping

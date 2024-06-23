@@ -3,6 +3,7 @@ package com.example.cmseventosapi.Controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.cmseventosapi.Model.Activity;
+import com.example.cmseventosapi.Services.ActivityService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.websocket.server.PathParam;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,6 +31,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Tag(name = "Atividade")
 public class ActivityController {
     
+    @Autowired
+    private ActivityService service;
+
     @Operation(summary = "Visualiza Atividade",method = "GET")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",description = "Visualização de atividade realizado com sucesso"),
@@ -36,8 +41,8 @@ public class ActivityController {
         @ApiResponse(responseCode = "500",description = "Erro ao visualizar identidade atividade")
     })
     @GetMapping("/{atividade}")
-    public ResponseEntity<Activity> vizualizaAtividade(@PathParam("atividade") String id) {
-        return new ResponseEntity<>(new Activity(),HttpStatus.OK);
+    public ResponseEntity<Activity> vizualizaAtividade(@PathParam("atividade") Long id) {
+        return new ResponseEntity<>(this.service.GetActivity(id),HttpStatus.OK);
     }
 
     @Operation(summary = "Cadastra Atividades",method = "POST")
@@ -46,11 +51,9 @@ public class ActivityController {
         @ApiResponse(responseCode = "400",description = "Parametro para cadastro de atividade inválidos"),
         @ApiResponse(responseCode = "500",description = "Erro ao cadastrar atividade")
     })
-    @PostMapping(consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Activity> cadastraAtividade(@RequestBody Activity atividade) {
-        //TODO: process POST request
-        
-        return new ResponseEntity<>(new Activity(),HttpStatus.OK);
+        return new ResponseEntity<>(this.service.CreateActivity(atividade),HttpStatus.OK);
     }
 
     @Operation(summary = "Atualiza Atividades",method = "PUT")
@@ -61,9 +64,7 @@ public class ActivityController {
     })
     @PutMapping("/{atividade}")
     public ResponseEntity<Activity> atualizaAtividade(@PathVariable("atividade") Long atividade_id, @RequestBody Activity atividadeAtualizada) {
-        //TODO: process PUT request
-        
-        return new ResponseEntity<>(new Activity(),HttpStatus.OK);
+        return new ResponseEntity<>(this.service.UpdateActivity(atividadeAtualizada, atividade_id),HttpStatus.OK);
     }
 
     @Operation(summary = "Remove Atividade",method = "DELETE")
@@ -73,7 +74,8 @@ public class ActivityController {
         @ApiResponse(responseCode = "500",description = "Erro ao remover atividade")
     })
     @DeleteMapping("/{atividade}")
-    public ResponseEntity<HttpStatus> removeAtividade(@PathVariable("atividade") String id) {
+    public ResponseEntity<HttpStatus> removeAtividade(@PathVariable("atividade") Long id) {
+        this.service.DeleteActivity(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
     

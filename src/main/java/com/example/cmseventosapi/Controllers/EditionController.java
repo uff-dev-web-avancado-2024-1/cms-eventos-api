@@ -1,5 +1,6 @@
 package com.example.cmseventosapi.Controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.cmseventosapi.Model.Edition;
+import com.example.cmseventosapi.Services.EditionService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -23,17 +25,18 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Edição")
 public class EditionController {
 
+    @Autowired
+    private EditionService service;
+
     @Operation(summary = "Cadastra Edição",method = "POST")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",description = "Cadastro de edição realizada com sucesso"),
         @ApiResponse(responseCode = "400",description = "Parametro para cadastro de edição inválidos"),
         @ApiResponse(responseCode = "500",description = "Erro ao cadastrar edição")
     })
-    @PostMapping(consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Edition> cadastraEdicao(@RequestBody Edition edicao) {
-        //TODO: process PUT request
-        
-        return new ResponseEntity<>(new Edition(),HttpStatus.OK);
+    @PostMapping(consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Edition> cadastraEdicao(@RequestBody Edition edicao) {        
+        return new ResponseEntity<>(this.service.CreateEdition(edicao),HttpStatus.OK);
     }
     
     @Operation(summary = "Atualiza Edição",method = "PUT")
@@ -43,10 +46,8 @@ public class EditionController {
         @ApiResponse(responseCode = "500",description = "Erro ao atualizar edição")
     })
     @PutMapping("/{edicao}")
-    public ResponseEntity<Edition> atualizaEdicao(@PathVariable("edicao") Long edicao_id, @RequestBody Edition edicaoAtualizado) {
-        //TODO: process PUT request
-        
-        return new ResponseEntity<>(new Edition(),HttpStatus.OK);
+    public ResponseEntity<Edition> atualizaEdicao(@PathVariable("edicao") Long edicao_id, @RequestBody Edition edicaoAtualizado) {     
+        return new ResponseEntity<>(this.service.UpdateEdition(edicaoAtualizado, edicao_id),HttpStatus.OK);
     }
 
     @Operation(summary = "Remove Edição",method = "DELETE")
@@ -56,7 +57,8 @@ public class EditionController {
         @ApiResponse(responseCode = "500",description = "Erro ao remover edição")
     })
     @DeleteMapping("/{edicao}")
-    public ResponseEntity<HttpStatus> removeEdicao(@PathVariable("edicao") String id) {
+    public ResponseEntity<HttpStatus> removeEdicao(@PathVariable("edicao") Long id) {
+        this.service.DeleteEdition(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

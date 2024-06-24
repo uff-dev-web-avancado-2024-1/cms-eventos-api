@@ -44,9 +44,4 @@ public class Edition {
     @OneToMany(mappedBy = "edition", cascade = CascadeType.ALL, orphanRemoval = true)
     @Schema(description = "Atividades da edição")
     private List<Activity> activities;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "edition_id", nullable = false)
-    @Schema(description = "Edição associada à atividade")
-    private Edition edition;
 }

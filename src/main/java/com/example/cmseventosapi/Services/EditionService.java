@@ -24,7 +24,6 @@ public class EditionService {
         editionToUpdate.setEndDate(edition.getEndDate());
         editionToUpdate.setEvent(edition.getEvent());
         editionToUpdate.setActivities(edition.getActivities());
-        editionToUpdate.setEdition(edition.getEdition());
         return this.repository.save(edition);
     }
 

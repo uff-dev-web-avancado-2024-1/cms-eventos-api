@@ -51,4 +51,15 @@ public class UserController {
     public ResponseEntity<User> atualizaUsuario(@PathVariable("usuario") Long usuario_id, @RequestBody User usuarioAtualizado){
         return new ResponseEntity<>(this.service.updateUser(usuarioAtualizado, usuario_id),HttpStatus.OK);
     }
+
+    @Operation(summary = "Torna usuário administrador", method = "PUT")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200",description = "Usuário promovido a administrador com sucesso"),
+        @ApiResponse(responseCode = "400",description = "Parametro para promoção de usuário inválidos"),
+        @ApiResponse(responseCode = "500",description = "Erro ao promover usuário a administrador")
+    })
+    @PutMapping("/{usuario}/admin")
+    public ResponseEntity<User> tornaAdmin(@PathVariable("usuario") Long usuario_id){
+        return new ResponseEntity<>(this.service.makeAdmin(usuario_id),HttpStatus.OK);
+    }
 }

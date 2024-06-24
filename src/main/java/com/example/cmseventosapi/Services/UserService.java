@@ -23,12 +23,19 @@ public class UserService {
         userToUpdate.setLogin(user.getLogin());
         userToUpdate.setAffiliation(user.getAffiliation());
         userToUpdate.setFavoriteActivities(user.getFavoriteActivities());
-        userToUpdate.setEdition(user.getEdition());
+        userToUpdate.setAdmin(user.isAdmin());
+        userToUpdate.setOrganizedEditions(user.getOrganizedEditions());
         return this.repository.save(user);
     }
 
     public User getUser(Long id){
         return this.repository.findById(id).get();
+    }
+
+    public User makeAdmin(Long id){
+        User userToUpdate = this.repository.findById(id).get();
+        userToUpdate.setAdmin(true);
+        return this.repository.save(userToUpdate);
     }
 
 }

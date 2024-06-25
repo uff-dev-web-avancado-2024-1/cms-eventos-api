@@ -1,5 +1,6 @@
 package com.example.cmseventosapi.Controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.cmseventosapi.Model.Event;
+import com.example.cmseventosapi.Services.EventService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,6 +27,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/api/eventos")
 @Tag(name = "Eventos")
 public class EventController {
+
+    @Autowired
+    private EventService service;
     
     @Operation(summary = "Visualiza Evento",method = "GET")
     @ApiResponses(value = {
@@ -33,8 +38,8 @@ public class EventController {
         @ApiResponse(responseCode = "500",description = "Erro ao visualizar identidade evento")
     })
     @GetMapping("/{evento}")
-    public ResponseEntity<Event> vizualizaEvento(@PathParam("evento") String id) {
-        return new ResponseEntity<>(new Event(),HttpStatus.OK);
+    public ResponseEntity<Event> vizualizaEvento(@PathParam("evento") Long id) {
+        return new ResponseEntity<>(this.service.GetEvent(id),HttpStatus.OK);
     }
 
     @Operation(summary = "Cadastra Eventos",method = "POST")
@@ -43,11 +48,9 @@ public class EventController {
         @ApiResponse(responseCode = "400",description = "Parametro para cadastro de evento inválidos"),
         @ApiResponse(responseCode = "500",description = "Erro ao cadastrar evento")
     })
-    @PostMapping(consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Event> cadastrarEvento(@RequestBody Event evento) {
-        //TODO: process POST request
-        
-        return new ResponseEntity<>(new Event(),HttpStatus.OK);
+    @PostMapping(consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Event> cadastrarEvento(@RequestBody Event evento) {      
+        return new ResponseEntity<>(this.service.CreateEvent(evento),HttpStatus.OK);
     }
     @Operation(summary = "Atualiza Eventos",method = "PUT")
     @ApiResponses(value = {
@@ -57,9 +60,7 @@ public class EventController {
     })
     @PutMapping("/{evento}")
     public ResponseEntity<Event> atualizaEvento(@PathVariable("evento") Long evento_id, @RequestBody Event eventoAtualizado) {
-        //TODO: process PUT request
-        
-        return new ResponseEntity<>(new Event(),HttpStatus.OK);
+        return new ResponseEntity<>(this.service.UpdateEvent(eventoAtualizado, evento_id),HttpStatus.OK);
     }
     @Operation(summary = "Remove Eventos",method = "DELETE")
     @ApiResponses(value = {
@@ -68,7 +69,8 @@ public class EventController {
         @ApiResponse(responseCode = "500",description = "Erro ao remover evento")
     })
     @DeleteMapping("/{evento}")
-    public ResponseEntity<HttpStatus> removeEvento(@PathVariable("evento") String id) {
+    public ResponseEntity<HttpStatus> removeEvento(@PathVariable("evento") Long id) {
+        this.service.DeleteEvent(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

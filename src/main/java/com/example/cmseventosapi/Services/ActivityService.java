@@ -4,13 +4,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.cmseventosapi.Model.Activity;
+import com.example.cmseventosapi.Model.User;
 import com.example.cmseventosapi.Repositories.ActivityRepository;
+import com.example.cmseventosapi.Repositories.UserRepository;
 
 @Service
 public class ActivityService {
     
     @Autowired
     private ActivityRepository repository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public Activity CreateActivity(Activity activity) {
         return this.repository.save(activity);
@@ -36,6 +41,18 @@ public class ActivityService {
 
     public void DeleteActivity(Long id) {
         this.repository.deleteById(id);
+    }
+    public void FavActivity(Long activityId, Long userId) {
+        Activity activity = this.repository.findById(activityId).orElseThrow(() -> new RuntimeException("Atividade não encontrada"));
+        User user = this.userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        if (!activity.getFavoritedByUsers().contains(user)) {
+            activity.getFavoritedByUsers().add(user);
+            user.getFavoriteActivities().add(activity);
+
+            this.repository.save(activity);
+            this.userRepository.save(user);
+        }
     }
 
 }

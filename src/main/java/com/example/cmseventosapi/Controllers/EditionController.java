@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.cmseventosapi.Model.Edition;
+import com.example.cmseventosapi.Model.User;
 import com.example.cmseventosapi.Services.EditionService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -60,5 +61,17 @@ public class EditionController {
     public ResponseEntity<HttpStatus> removeEdicao(@PathVariable("edicao") Long id) {
         this.service.DeleteEdition(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Operation(summary = "Adicionar organizador da edição", method = "POST")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Adição de organizador realizada com sucesso"),
+        @ApiResponse(responseCode = "400", description = "Parâmetros inválidos para adicionar organizador de edição"),
+        @ApiResponse(responseCode = "500", description = "Erro ao adicionar organizador de edição")
+    })
+    @PostMapping("/{edicao}")
+    public ResponseEntity<HttpStatus> addOrganizerToEdition(@RequestBody Edition edicao, @RequestBody User usuario) {
+        this.service.addOrganizerToEdition(edicao.getId(), usuario.getId());
+        return ResponseEntity.ok().build();
     }
 }

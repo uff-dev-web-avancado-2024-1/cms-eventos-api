@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.cmseventosapi.Model.Edition;
+import com.example.cmseventosapi.Model.User;
 import com.example.cmseventosapi.Repositories.EditionRepository;
+import com.example.cmseventosapi.Repositories.UserRepository;
 
 @Service
 public class EditionService {
@@ -33,5 +35,18 @@ public class EditionService {
 
     public void DeleteEdition(Long id) {
         this.repository.deleteById(id);
+    }
+
+    @Autowired
+    private UserRepository userRepository;
+    public void addOrganizerToEdition(Long editionId, Long userId) {
+        Edition edition = this.repository.findById(editionId).orElseThrow(() -> new RuntimeException("Edição não encontrada"));
+        User user = this.userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        user.getOrganizedEditions().add(edition);
+        edition.setOrganizer(user);
+
+        this.userRepository.save(user);
+        this.repository.save(edition);
     }
 }

@@ -56,4 +56,7 @@ public class User {
 
     @Schema(description = "Se o usuário é administrador", example = "true")
     private boolean isAdmin;
+
+    @Schema(description = "Senha do usuário", example = "123456")
+    private String password;
 }

@@ -39,18 +39,20 @@ public class MessageService {
     public void sendEventReminderEmails() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime oneHourLater = now.plusHours(1);
-        List<Activity> activities = activityRepository.findActivitiesByStartTimeBetween(now, oneHourLater);
+        List<User> users = userRepository.findAll();
 
-        for (Activity activity : activities) {
-            activity.getUsers().forEach(user -> {
-                sendEmail(user.getEmail(), "Lembrete de atividades favoritadas",
+        for (User user : users) {
+            for (Activity activity : user.getFavoriteActivities()) {
+                if (activity.getStartTime().isAfter(now) && activity.getStartTime().isBefore(oneHourLater)) {
+                    sendEmail(user.getEmail(), "Lembrete de atividades favoritadas",
                         "Prezado, " + user.getName() + ",\n\n" +
                                 "Este é um lembrete para a seguinte atividade que iniciará em breve::\n\n" +
                                 "Atividade: " + activity.getName() + "\n" +
                                 "Horário: " + activity.getStartTime() + "\n" +
                                 "Local: " + activity.getLocation() + "\n\n" +
                                 "Atenciosamente,\nEquipe de evento");
-            });
+                }
+            }
         }
     }
 

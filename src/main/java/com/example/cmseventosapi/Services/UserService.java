@@ -1,6 +1,7 @@
 package com.example.cmseventosapi.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.cmseventosapi.Model.User;
@@ -12,7 +13,18 @@ public class UserService {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private PasswordEncoder encoder;
+
     public User createUser(User user){
+        if(this.repository.findByLogin(user.getLogin()).isPresent()){
+            throw new RuntimeException("Login already exists");
+        }
+        if (this.repository.findByEmail(user.getEmail()).isPresent()){
+            throw new RuntimeException("Email already exists");
+        }
+        user.setPassword(encoder.encode(user.getPassword()));
+
         return this.repository.save(user);
     }
 

@@ -60,7 +60,7 @@ public class EditionController {
         try {
             return new ResponseEntity<>(this.service.UpdateEdition(edicaoAtualizado, edicao_id),HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new RuntimeException("Erro ao atualizar edição");
         }
     }
 

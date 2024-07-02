@@ -77,9 +77,12 @@ public class EditionController {
         @ApiResponse(responseCode = "400", description = "Parâmetros inválidos para adicionar organizador de edição"),
         @ApiResponse(responseCode = "500", description = "Erro ao adicionar organizador de edição")
     })
-    @PostMapping("/{edicao}")
-    public ResponseEntity<HttpStatus> addOrganizerToEdition(@RequestBody Edition edicao, @RequestBody User usuario) {
-        this.service.addOrganizerToEdition(edicao.getId(), usuario.getId());
+    @PostMapping("/{edicao}/{organizador}")
+    public ResponseEntity<HttpStatus> addOrganizerToEdition(@PathVariable("edicao") Long editionId,@PathVariable("organizador") Long userId) {
+        if (editionId == null || userId == null) {
+          throw new IllegalArgumentException("Parâmetros inválidos para adicionar organizador de edição");
+        }
+        this.service.addOrganizerToEdition(editionId, userId);
         return ResponseEntity.ok().build();
     }
 }

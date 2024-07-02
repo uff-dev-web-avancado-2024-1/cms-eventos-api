@@ -1,5 +1,7 @@
 package com.example.cmseventosapi.Controllers;
 
+import com.example.cmseventosapi.Model.Requests.CreateActivityReq;
+import com.example.cmseventosapi.Model.Responses.CreateActivityResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,15 +50,12 @@ public class ActivityController {
         @ApiResponse(responseCode = "500",description = "Erro ao cadastrar atividade")
     })
     @PostMapping(consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Activity> cadastraAtividade(@RequestBody Activity atividade) {
-        if (atividade == null || atividade.getName() == null || atividade.getType()==null || atividade.getDate()==null || atividade.getDescription() == null || atividade.getStartTime() == null || atividade.getEndTime() == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<CreateActivityResp> cadastraAtividade(@RequestBody CreateActivityReq createActivityReq) {
+        if (createActivityReq == null || createActivityReq.getName() == null || createActivityReq.getType()==null || createActivityReq.getDate()==null || createActivityReq.getDescription() == null || createActivityReq.getStartTime() == null || createActivityReq.getEndTime() == null){
+            throw new IllegalArgumentException("Parâmetros inválidos para o cadastro da atividade");
         }
-        try {
-            return new ResponseEntity<>(this.service.CreateActivity(atividade),HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
+        return new ResponseEntity<>(this.service.CreateActivity(createActivityReq),HttpStatus.OK);
     }
 
     @Operation(summary = "Atualiza Atividades",method = "PUT")

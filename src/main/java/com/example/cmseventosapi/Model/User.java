@@ -59,4 +59,13 @@ public class User {
 
     @Schema(description = "Senha do usuário", example = "123456")
     private String password;
+
+    public boolean isUserOrganizer(Long editionId) {
+        for (Edition edition : this.organizedEditions) {
+            if (edition.getId().equals(editionId)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -51,13 +51,9 @@ public class EventController {
     @PostMapping(consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Event> cadastrarEvento(@RequestBody Event evento) {
         if (evento == null || evento.getName() == null || evento.getDescription() == null || evento.getAcronym() == null || evento.getPath() == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException("Parâmetros inválidos para o cadastro do evento");
         }
-        try {
             return new ResponseEntity<>(this.service.CreateEvent(evento),HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }      
     }
     @Operation(summary = "Atualiza Eventos",method = "PUT")
     @ApiResponses(value = {

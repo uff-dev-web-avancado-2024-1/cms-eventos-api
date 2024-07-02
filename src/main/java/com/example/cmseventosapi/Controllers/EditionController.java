@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.cmseventosapi.Model.Edition;
-import com.example.cmseventosapi.Model.User;
 import com.example.cmseventosapi.Services.EditionService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,13 +49,9 @@ public class EditionController {
     @PutMapping("/{edicao}")
     public ResponseEntity<Edition> atualizaEdicao(@PathVariable("edicao") Long edicao_id, @RequestBody Edition edicaoAtualizado) {     
         if (edicao_id == null || edicaoAtualizado == null || edicaoAtualizado.getNumber() == null || edicaoAtualizado.getYear() == null || edicaoAtualizado.getStartDate() == null || edicaoAtualizado.getEndDate() == null || edicaoAtualizado.getEvent() == null || edicaoAtualizado.getActivities() == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException("Parâmetros inválidos para a atualização da edição");
         }
-        try {
             return new ResponseEntity<>(this.service.UpdateEdition(edicaoAtualizado, edicao_id),HttpStatus.OK);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao atualizar edição");
-        }
     }
 
     @Operation(summary = "Remove Edição",method = "DELETE")

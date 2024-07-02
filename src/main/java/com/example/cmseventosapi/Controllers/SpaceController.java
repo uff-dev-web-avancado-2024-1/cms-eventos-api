@@ -1,5 +1,6 @@
 package com.example.cmseventosapi.Controllers;
 
+import com.example.cmseventosapi.Model.Requests.CreateSpaceReq;
 import com.example.cmseventosapi.Model.Space;
 import com.example.cmseventosapi.Services.SpaceService;
 
@@ -27,15 +28,8 @@ public class SpaceController {
         @ApiResponse(responseCode = "500", description = "Erro ao cadastrar espaço")
     })
     @PostMapping(consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Space> cadastrarEspacoDisponivel(@RequestBody Space espaco) {   
-        if (espaco == null || espaco.getName() == null || espaco.getCapacity() == null || espaco.getDescription() == null || espaco.getResources() == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        try {
-            return new ResponseEntity<>(this.service.CreateSpace(espaco),HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<Space> cadastrarEspacoDisponivel(@RequestBody CreateSpaceReq createSpaceReq) {
+       return new ResponseEntity<>(this.service.CreateSpace(createSpaceReq),HttpStatus.OK);
     }
 
     @Operation(summary = "Editar espaço disponivel", method = "PUT")

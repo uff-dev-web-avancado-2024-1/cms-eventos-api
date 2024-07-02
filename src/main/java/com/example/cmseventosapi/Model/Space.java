@@ -12,7 +12,9 @@ import java.util.List;
 @Setter
 @Schema(description = "Modelo que representa um espaço")
 public class Space {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Schema(description = "Nome do espaço", example = "Auditório")

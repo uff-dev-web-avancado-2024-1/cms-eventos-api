@@ -1,6 +1,9 @@
 package com.example.cmseventosapi.Services;
 
 import com.example.cmseventosapi.Auth.Exceptions.UserMustBeAdminToPerformActionException;
+import com.example.cmseventosapi.Model.Event;
+import com.example.cmseventosapi.Model.Requests.CreateEditionReq;
+import com.example.cmseventosapi.Repositories.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,7 +20,20 @@ public class EditionService {
     @Autowired
     private EditionRepository repository;
 
-    public Edition CreateEdition(Edition edition) {
+    @Autowired
+    private EventRepository eventRepository;
+
+    public Edition CreateEdition(CreateEditionReq editionReq) {
+        Event event = this.eventRepository.findById(editionReq.getEventId())
+                .orElseThrow(() -> new RuntimeException("Event not found"));
+
+        Edition edition = new Edition();
+        edition.setNumber(editionReq.getNumber());
+        edition.setYear(editionReq.getYear());
+        edition.setStartDate(editionReq.getStartDate());
+        edition.setEndDate(editionReq.getEndDate());
+        edition.setEvent(event);
+
         return this.repository.save(edition);
     }
 

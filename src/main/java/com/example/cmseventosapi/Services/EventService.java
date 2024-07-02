@@ -28,7 +28,6 @@ public class EventService {
         if(!loggedUser.isAdmin()){
             throw new UserMustBeAdminToPerformActionException("You don't have permission to do this");
         }
-
         return this.repository.save(event);
     }
 

@@ -52,7 +52,7 @@ public class EditionService {
 
     @Autowired
     private UserRepository userRepository;
-    public void addOrganizerToEdition(Long editionId, Long userId) {
+    public Edition addOrganizerToEdition(Long editionId, Long userId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User loggedUser = this.userRepository.findByLogin(authentication.getName()).get();
         if(!loggedUser.isAdmin()){
@@ -65,6 +65,6 @@ public class EditionService {
         edition.setOrganizer(user);
 
         this.userRepository.save(user);
-        this.repository.save(edition);
+        return this.repository.save(edition);
     }
 }

@@ -28,7 +28,14 @@ public class SpaceController {
     })
     @PostMapping(consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Space> cadastrarEspacoDisponivel(@RequestBody Space espaco) {   
-        return new ResponseEntity<>(this.service.CreateSpace(espaco),HttpStatus.OK);
+        if (espaco == null || espaco.getName() == null || espaco.getCapacity() == null || espaco.getDescription() == null || espaco.getResources() == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        try {
+            return new ResponseEntity<>(this.service.CreateSpace(espaco),HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Operation(summary = "Editar espaço disponivel", method = "PUT")

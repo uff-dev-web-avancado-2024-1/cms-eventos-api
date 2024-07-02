@@ -1,8 +1,11 @@
 package com.example.cmseventosapi.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.example.cmseventosapi.Auth.Exceptions.UserMustBeAdminToPerformActionException;
 import com.example.cmseventosapi.Model.Activity;
 import com.example.cmseventosapi.Model.User;
 import com.example.cmseventosapi.Repositories.ActivityRepository;
@@ -18,6 +21,11 @@ public class ActivityService {
     private UserRepository userRepository;
 
     public Activity CreateActivity(Activity activity) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User loggedUser = this.userRepository.findByLogin(authentication.getName()).get();
+        if(!loggedUser.isUserOrganizer(activity.getEdition().getId())){
+            throw new UserMustBeAdminToPerformActionException("You must be an organizer to do this");
+        }
         return this.repository.save(activity);
     }
 

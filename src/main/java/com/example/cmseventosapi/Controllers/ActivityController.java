@@ -49,7 +49,14 @@ public class ActivityController {
     })
     @PostMapping(consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Activity> cadastraAtividade(@RequestBody Activity atividade) {
-        return new ResponseEntity<>(this.service.CreateActivity(atividade),HttpStatus.OK);
+        if (atividade == null || atividade.getName() == null || atividade.getType()==null || atividade.getDate()==null || atividade.getDescription() == null || atividade.getStartTime() == null || atividade.getEndTime() == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        try {
+            return new ResponseEntity<>(this.service.CreateActivity(atividade),HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Operation(summary = "Atualiza Atividades",method = "PUT")

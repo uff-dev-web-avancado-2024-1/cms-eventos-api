@@ -13,6 +13,7 @@ import com.example.cmseventosapi.Model.Edition;
 import com.example.cmseventosapi.Model.User;
 import com.example.cmseventosapi.Repositories.EditionRepository;
 import com.example.cmseventosapi.Repositories.UserRepository;
+import org.webjars.NotFoundException;
 
 @Service
 public class EditionService {
@@ -25,7 +26,7 @@ public class EditionService {
 
     public Edition CreateEdition(CreateEditionReq editionReq) {
         Event event = this.eventRepository.findById(editionReq.getEventId())
-                .orElseThrow(() -> new RuntimeException("Event not found"));
+                .orElseThrow(() -> new NotFoundException("Event not found"));
 
         Edition edition = new Edition();
         edition.setNumber(editionReq.getNumber());

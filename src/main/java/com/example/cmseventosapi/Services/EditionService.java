@@ -1,6 +1,9 @@
 package com.example.cmseventosapi.Services;
 
+import com.example.cmseventosapi.Auth.Exceptions.UserMustBeAdminToPerformActionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.cmseventosapi.Model.Edition;
@@ -19,6 +22,11 @@ public class EditionService {
     }
 
     public Edition UpdateEdition(Edition edition, Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User loggedUser = this.userRepository.findByLogin(authentication.getName()).get();
+        if(!loggedUser.isAdmin()){
+            throw new UserMustBeAdminToPerformActionException("You don't have permission to do this");
+        }
         Edition editionToUpdate = this.repository.findById(id).get();
         editionToUpdate.setNumber(edition.getNumber());
         editionToUpdate.setYear(edition.getYear());
@@ -34,12 +42,22 @@ public class EditionService {
     }
 
     public void DeleteEdition(Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User loggedUser = this.userRepository.findByLogin(authentication.getName()).get();
+        if(!loggedUser.isAdmin()){
+            throw new UserMustBeAdminToPerformActionException("You don't have permission to do this");
+        }
         this.repository.deleteById(id);
     }
 
     @Autowired
     private UserRepository userRepository;
     public void addOrganizerToEdition(Long editionId, Long userId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User loggedUser = this.userRepository.findByLogin(authentication.getName()).get();
+        if(!loggedUser.isAdmin()){
+            throw new UserMustBeAdminToPerformActionException("You don't have permission to do this");
+        }
         Edition edition = this.repository.findById(editionId).orElseThrow(() -> new RuntimeException("Edição não encontrada"));
         User user = this.userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 

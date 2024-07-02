@@ -1,6 +1,9 @@
 package com.example.cmseventosapi.Services;
 
+import com.example.cmseventosapi.Auth.Exceptions.UserMustBeAdminToPerformActionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +48,11 @@ public class UserService {
     }
 
     public User makeAdmin(Long id){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User loggedUser = this.repository.findByLogin(authentication.getName()).get();
+        if(!loggedUser.isAdmin()){
+            throw new UserMustBeAdminToPerformActionException("You must be an admin to do this");
+        }
         User userToUpdate = this.repository.findById(id).get();
         userToUpdate.setAdmin(true);
         return this.repository.save(userToUpdate);

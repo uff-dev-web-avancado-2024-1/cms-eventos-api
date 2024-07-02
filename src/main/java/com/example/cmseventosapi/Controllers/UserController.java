@@ -4,6 +4,9 @@ package com.example.cmseventosapi.Controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,6 +23,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.security.PrivilegedActionException;
 
 
 @RestController
@@ -55,11 +60,10 @@ public class UserController {
     @Operation(summary = "Torna usuário administrador", method = "PUT")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",description = "Usuário promovido a administrador com sucesso"),
-        @ApiResponse(responseCode = "400",description = "Parametro para promoção de usuário inválidos"),
+        @ApiResponse(responseCode = "403",description = "O usuário deve ser administrador para realizar essa ação"),
         @ApiResponse(responseCode = "500",description = "Erro ao promover usuário a administrador")
     })
     @PutMapping("/{usuario}/admin")
     public ResponseEntity<User> tornaAdmin(@PathVariable("usuario") Long usuario_id){
         return new ResponseEntity<>(this.service.makeAdmin(usuario_id),HttpStatus.OK);
-    }
-}
+}}

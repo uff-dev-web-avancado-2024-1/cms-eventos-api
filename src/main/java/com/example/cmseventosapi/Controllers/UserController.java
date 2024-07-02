@@ -39,7 +39,14 @@ public class UserController {
     })
     @PostMapping(consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> cadastrarUsuario(@RequestBody User usuario){
-        return new ResponseEntity<>(this.service.createUser(usuario),HttpStatus.OK);
+        if (usuario == null || usuario.getName() == null || usuario.getEmail() == null || usuario.getLogin() == null || usuario.getAffiliation() == null || usuario.getPassword() == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        try {
+            return new ResponseEntity<>(this.service.createUser(usuario),HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Operation(summary = "Atualiza novo usuário", method = "PUT")

@@ -1,5 +1,6 @@
 package com.example.cmseventosapi.Controllers;
 
+import com.example.cmseventosapi.Model.Requests.CreateEditionReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +37,8 @@ public class EditionController {
         @ApiResponse(responseCode = "500",description = "Erro ao cadastrar edição")
     })
     @PostMapping(consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Edition> cadastraEdicao(@RequestBody Edition edicao) {        
-        return new ResponseEntity<>(this.service.CreateEdition(edicao),HttpStatus.OK);
+    public ResponseEntity<Edition> cadastraEdicao(@RequestBody CreateEditionReq edicaoReq) {
+        return new ResponseEntity<>(this.service.CreateEdition(edicaoReq),HttpStatus.OK);
     }
     
     @Operation(summary = "Atualiza Edição",method = "PUT")

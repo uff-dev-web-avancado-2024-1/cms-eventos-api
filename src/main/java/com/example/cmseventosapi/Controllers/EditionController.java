@@ -1,5 +1,6 @@
 package com.example.cmseventosapi.Controllers;
 
+import com.example.cmseventosapi.Model.Requests.CreateEditionReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.cmseventosapi.Model.Edition;
-import com.example.cmseventosapi.Model.User;
 import com.example.cmseventosapi.Services.EditionService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,8 +36,8 @@ public class EditionController {
         @ApiResponse(responseCode = "500",description = "Erro ao cadastrar edição")
     })
     @PostMapping(consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Edition> cadastraEdicao(@RequestBody Edition edicao) {        
-        return new ResponseEntity<>(this.service.CreateEdition(edicao),HttpStatus.OK);
+    public ResponseEntity<Edition> cadastraEdicao(@RequestBody CreateEditionReq edicaoReq) {
+        return new ResponseEntity<>(this.service.CreateEdition(edicaoReq),HttpStatus.OK);
     }
     
     @Operation(summary = "Atualiza Edição",method = "PUT")
@@ -48,7 +48,10 @@ public class EditionController {
     })
     @PutMapping("/{edicao}")
     public ResponseEntity<Edition> atualizaEdicao(@PathVariable("edicao") Long edicao_id, @RequestBody Edition edicaoAtualizado) {     
-        return new ResponseEntity<>(this.service.UpdateEdition(edicaoAtualizado, edicao_id),HttpStatus.OK);
+        if (edicao_id == null || edicaoAtualizado == null || edicaoAtualizado.getNumber() == null || edicaoAtualizado.getYear() == null || edicaoAtualizado.getStartDate() == null || edicaoAtualizado.getEndDate() == null || edicaoAtualizado.getEvent() == null || edicaoAtualizado.getActivities() == null){
+            throw new IllegalArgumentException("Parâmetros inválidos para a atualização da edição");
+        }
+            return new ResponseEntity<>(this.service.UpdateEdition(edicaoAtualizado, edicao_id),HttpStatus.OK);
     }
 
     @Operation(summary = "Remove Edição",method = "DELETE")
@@ -69,9 +72,12 @@ public class EditionController {
         @ApiResponse(responseCode = "400", description = "Parâmetros inválidos para adicionar organizador de edição"),
         @ApiResponse(responseCode = "500", description = "Erro ao adicionar organizador de edição")
     })
-    @PostMapping("/{edicao}")
-    public ResponseEntity<HttpStatus> addOrganizerToEdition(@RequestBody Edition edicao, @RequestBody User usuario) {
-        this.service.addOrganizerToEdition(edicao.getId(), usuario.getId());
+    @PostMapping("/{edicao}/{organizador}")
+    public ResponseEntity<HttpStatus> addOrganizerToEdition(@PathVariable("edicao") Long editionId,@PathVariable("organizador") Long userId) {
+        if (editionId == null || userId == null) {
+          throw new IllegalArgumentException("Parâmetros inválidos para adicionar organizador de edição");
+        }
+        this.service.addOrganizerToEdition(editionId, userId);
         return ResponseEntity.ok().build();
     }
 }

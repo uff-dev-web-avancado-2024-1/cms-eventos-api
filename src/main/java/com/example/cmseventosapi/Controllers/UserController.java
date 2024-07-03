@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
+
 @RestController
 @RequestMapping("/api/usuarios")
 @Tag(name = "Usuário")
@@ -38,7 +39,10 @@ public class UserController {
     })
     @PostMapping(consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> cadastrarUsuario(@RequestBody User usuario){
-        return new ResponseEntity<>(this.service.createUser(usuario),HttpStatus.OK);
+        if (usuario == null || usuario.getName() == null || usuario.getEmail() == null || usuario.getLogin() == null || usuario.getAffiliation() == null || usuario.getPassword() == null){
+            throw new IllegalArgumentException("Parâmetros inválidos para o cadastro do usuário");
+        }
+            return new ResponseEntity<>(this.service.createUser(usuario),HttpStatus.OK);
     }
 
     @Operation(summary = "Atualiza novo usuário", method = "PUT")
@@ -55,11 +59,10 @@ public class UserController {
     @Operation(summary = "Torna usuário administrador", method = "PUT")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200",description = "Usuário promovido a administrador com sucesso"),
-        @ApiResponse(responseCode = "400",description = "Parametro para promoção de usuário inválidos"),
+        @ApiResponse(responseCode = "403",description = "O usuário deve ser administrador para realizar essa ação"),
         @ApiResponse(responseCode = "500",description = "Erro ao promover usuário a administrador")
     })
     @PutMapping("/{usuario}/admin")
     public ResponseEntity<User> tornaAdmin(@PathVariable("usuario") Long usuario_id){
         return new ResponseEntity<>(this.service.makeAdmin(usuario_id),HttpStatus.OK);
-    }
-}
+}}

@@ -1,5 +1,6 @@
 package com.example.cmseventosapi.Controllers;
 
+import com.example.cmseventosapi.Model.Requests.CreateEventReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,8 +50,11 @@ public class EventController {
         @ApiResponse(responseCode = "500",description = "Erro ao cadastrar evento")
     })
     @PostMapping(consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Event> cadastrarEvento(@RequestBody Event evento) {      
-        return new ResponseEntity<>(this.service.CreateEvent(evento),HttpStatus.OK);
+    public ResponseEntity<Event> cadastrarEvento(@RequestBody CreateEventReq eventoReq) {
+        if (eventoReq == null || eventoReq.getName() == null || eventoReq.getDescription() == null || eventoReq.getAcronym() == null || eventoReq.getPath() == null){
+            throw new IllegalArgumentException("Parâmetros inválidos para o cadastro do evento");
+        }
+            return new ResponseEntity<>(this.service.CreateEvent(eventoReq),HttpStatus.OK);
     }
     @Operation(summary = "Atualiza Eventos",method = "PUT")
     @ApiResponses(value = {

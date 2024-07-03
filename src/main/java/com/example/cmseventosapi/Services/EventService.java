@@ -1,6 +1,7 @@
 package com.example.cmseventosapi.Services;
 
 import com.example.cmseventosapi.Auth.Exceptions.UserMustBeAdminToPerformActionException;
+import com.example.cmseventosapi.Model.Requests.CreateEventReq;
 import com.example.cmseventosapi.Model.User;
 import com.example.cmseventosapi.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,20 @@ public class EventService {
     @Autowired
     private UserRepository userRepository;
 
-    public Event CreateEvent(Event event) {
+    public Event CreateEvent(CreateEventReq eventReq) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User loggedUser = this.userRepository.findByLogin(authentication.getName()).get();
         if(!loggedUser.isAdmin()){
             throw new UserMustBeAdminToPerformActionException("You don't have permission to do this");
         }
+        Event event = new Event();
+
+        event.setName(eventReq.getName());
+        event.setDescription(eventReq.getDescription());
+        event.setAcronym(eventReq.getAcronym());
+        event.setPath(eventReq.getPath());
+
         return this.repository.save(event);
     }
 
